@@ -1,0 +1,151 @@
+﻿@model CriarAlertaViewModel
+@{
+    ViewData["Title"] = "Criar Alerta";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-plus-circle text-success"></i> Criar Novo Alerta
+</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form asp-action="Criar" method="post">
+                    <input type="hidden" asp-for="UsuarioId" value="1" />
+
+                    <div class="mb-3">
+                        <label asp-for="TipoAlerta" class="form-label"></label>
+                        <select asp-for="TipoAlerta" asp-items="Model.TiposAlerta" class="form-select">
+                            <option value="">-- Selecione o Tipo --</option>
+                        </select>
+                        <span asp-validation-for="TipoAlerta" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TipoMoeda" class="form-label"></label>
+                        <select asp-for="TipoMoeda" asp-items="Model.TiposMoeda" class="form-select">
+                            <option value="">-- Nenhuma (usar indicador) --</option>
+                        </select>
+                        <span asp-validation-for="TipoMoeda" class="text-danger"></span>
+                        <small class="form-text text-muted">Selecione uma moeda OU um indicador, não ambos.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TipoIndicador" class="form-label"></label>
+                        <select asp-for="TipoIndicador" asp-items="Model.TiposIndicador" class="form-select">
+                            <option value="">-- Nenhum (usar moeda) --</option>
+                        </select>
+                        <span asp-validation-for="TipoIndicador" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ValorGatilho" class="form-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input asp-for="ValorGatilho"
+                                   type="text"
+                                   class="form-control valor-monetario"
+                                   placeholder="5,50 ou 5.50"
+                                   data-val="true"
+                                   data-val-range="Valor deve ser maior que zero"
+                                   data-val-range-min="0.01" />
+                        </div>
+                        <span asp-validation-for="ValorGatilho" class="text-danger"></span>
+                        <small class="form-text text-muted">Valor que ativará o alerta. Use vírgula ou ponto (ex: 5,50 ou 5.50)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Descricao" class="form-label"></label>
+                        <textarea asp-for="Descricao" class="form-control" rows="3" placeholder="Ex: Me avise quando o dólar passar de R$ 5,50"></textarea>
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save"></i> Criar Alerta
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-info-circle"></i> Dicas</h5>
+                <ul class="small">
+                    <li>Escolha entre monitorar uma <strong>moeda</strong> ou um <strong>indicador</strong></li>
+                    <li>Defina um valor gatilho que ativará o alerta</li>
+                    <li>Você receberá um e-mail quando o alerta for disparado</li>
+                    <li>Pode pausar ou remover alertas a qualquer momento</li>
+                    <li>Alertas verificam os valores a cada 30 minutos</li>
+                </ul>
+
+                <hr />
+
+                <h6>Exemplos:</h6>
+                <ul class="small">
+                    <li>
+                        <strong>Dólar acima de R$ 5,50:</strong><br />
+                        Tipo: Cotação Acima De<br />
+                        Moeda: Dólar<br />
+                        Valor: 5.50
+                    </li>
+                    <li>
+                        <strong>SELIC mudou:</strong><br />
+                        Tipo: Cotação Acima De<br />
+                        Indicador: SELIC<br />
+                        Valor: 10.50
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function() {
+            $('.valor-monetario').on('blur', function() {
+                var valor = $(this).val();
+
+                valor = valor.replace(',', '.');
+
+                if (valor && !isNaN(valor)) {
+                    $(this).val(parseFloat(valor).toFixed(2));
+                }
+            });
+
+            $('form').on('submit', function(e) {
+                $('.valor-monetario').each(function() {
+                    var valor = $(this).val();
+                    if (valor) {
+                        $(this).val(valor.replace(',', '.'));
+                    }
+                });
+            });
+
+            $('.valor-monetario').on('keypress', function(e) {
+                var charCode = e.which || e.keyCode;
+                var charStr = String.fromCharCode(charCode);
+
+                if (!/[\d\.,]/.test(charStr) && charCode !== 8 && charCode !== 46) {
+                    e.preventDefault();
+                }
+
+                var currentValue = $(this).val();
+                if ((charStr === '.' || charStr === ',') &&
+                    (currentValue.indexOf('.') > -1 || currentValue.indexOf(',') > -1)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

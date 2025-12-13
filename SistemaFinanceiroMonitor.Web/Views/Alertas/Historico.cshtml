@@ -1,0 +1,128 @@
+﻿@model HistoricoAlertaViewModel
+@{
+    ViewData["Title"] = "Histórico do Alerta";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-history text-info"></i> Histórico do Alerta
+</h2>
+
+<!-- Informações do Alerta -->
+@if (Model.Alerta != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-bell"></i> Informações do Alerta</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="mb-1">
+                                <strong>Descrição:</strong> @Model.Alerta.Descricao
+                            </p>
+                            <p class="mb-1">
+                                <strong>Tipo:</strong> @Model.Alerta.TipoAlertaDescricao
+                            </p>
+                            @if (Model.Alerta.TipoMoeda.HasValue)
+                            {
+                                <p class="mb-1">
+                                    <strong>Moeda:</strong> @Model.Alerta.NomeMoeda
+                                </p>
+                            }
+                            @if (Model.Alerta.TipoIndicador.HasValue)
+                            {
+                                <p class="mb-1">
+                                    <strong>Indicador:</strong> @Model.Alerta.NomeIndicador
+                                </p>
+                            }
+                            @if (Model.Alerta.ValorGatilho.HasValue)
+                            {
+                                <p class="mb-0">
+                                    <strong>Valor Gatilho:</strong> R$ @Model.Alerta.ValorGatilho.Value.ToString("N2")
+                                </p>
+                            }
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <h5>Status</h5>
+                            <span class="badge bg-secondary fs-6">@Model.Alerta.StatusDescricao</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Histórico de Disparos -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Histórico de Disparos (@Model.Historico.Count)</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Historico.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Valor no Momento</th>
+                                    <th>E-mail Enviado</th>
+                                    <th>Data Envio E-mail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Historico)
+                                {
+                                    <tr>
+                                        <td>@item.DataDisparo.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                        <td><strong>R$ @item.ValorNoMomento.ToString("N4")</strong></td>
+                                        <td>
+                                            @if (item.EmailEnviado)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check"></i> Sim
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times"></i> Não
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.DataEnvioEmail.HasValue)
+                                            {
+                                                @item.DataEnvioEmail.Value.ToString("dd/MM/yyyy HH:mm:ss")
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Este alerta ainda não foi disparado.
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Voltar para Alertas
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

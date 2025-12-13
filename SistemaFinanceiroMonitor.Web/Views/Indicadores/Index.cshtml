@@ -1,0 +1,122 @@
+﻿@model IndicadorViewModel
+@{
+    ViewData["Title"] = "Indicadores Econômicos";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-chart-bar text-info"></i> Indicadores Econômicos
+</h2>
+
+<!-- Seletor de Indicador -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-route-tipoIndicador="@((int)TipoIndicador.Selic)"
+               class="btn @(Model.TipoIndicadorSelecionado == TipoIndicador.Selic ? "btn-info text-white" : "btn-outline-info")">
+                <i class="fas fa-percentage"></i> SELIC
+            </a>
+            <a asp-action="Index" asp-route-tipoIndicador="@((int)TipoIndicador.IPCA)"
+               class="btn @(Model.TipoIndicadorSelecionado == TipoIndicador.IPCA ? "btn-info text-white" : "btn-outline-info")">
+                <i class="fas fa-chart-line"></i> IPCA
+            </a>
+            <a asp-action="Index" asp-route-tipoIndicador="@((int)TipoIndicador.IGPM)"
+               class="btn @(Model.TipoIndicadorSelecionado == TipoIndicador.IGPM ? "btn-info text-white" : "btn-outline-info")">
+                <i class="fas fa-chart-area"></i> IGP-M
+            </a>
+            <a asp-action="Index" asp-route-tipoIndicador="@((int)TipoIndicador.CDI)"
+               class="btn @(Model.TipoIndicadorSelecionado == TipoIndicador.CDI ? "btn-info text-white" : "btn-outline-info")">
+                <i class="fas fa-coins"></i> CDI
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Último Indicador -->
+@if (Model.UltimoIndicador != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> Último Valor - @Model.UltimoIndicador.NomeIndicador
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Valor</h6>
+                            <h2 class="text-primary">@Model.UltimoIndicador.ValorFormatado</h2>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted">Data Referência</h6>
+                            <h2>@Model.UltimoIndicador.DataReferencia.ToString("MMMM/yyyy")</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> Nenhum indicador disponível no momento. Execute o job de atualização.
+    </div>
+}
+
+<!-- Histórico -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Histórico - Últimos 12 Meses</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Indicadores.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data Referência</th>
+                                    <th>Valor</th>
+                                    <th>Variação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var indicador in Model.Indicadores)
+                                {
+                                    <tr>
+                                        <td>@indicador.DataReferencia.ToString("MMMM/yyyy")</td>
+                                        <td><strong>@indicador.ValorFormatado</strong></td>
+                                        <td>
+                                            @if (indicador.VariacaoPercentual.HasValue)
+                                            {
+                                                var classe = indicador.VariacaoPercentual >= 0 ? "text-success" : "text-danger";
+                                                var icone = indicador.VariacaoPercentual >= 0 ? "fa-arrow-up" : "fa-arrow-down";
+                                                <span class="@classe">
+                                                    <i class="fas @icone"></i> @indicador.VariacaoPercentual.Value.ToString("N2")%
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Nenhum indicador disponível.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

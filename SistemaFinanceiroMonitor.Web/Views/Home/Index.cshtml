@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Início";
+}
+
+<div class="text-center">
+    <h1 class="display-4 mb-4">
+        <i class="fas fa-chart-line text-primary"></i>
+        Sistema Financeiro Monitor
+    </h1>
+    <p class="lead">Monitore cotações, indicadores econômicos e receba alertas em tempo real</p>
+
+    <div class="row mt-5 g-4">
+        <div class="col-md-3">
+            <div class="card border-primary shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-tachometer-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Dashboard</h5>
+                    <p class="card-text">Visualize dados consolidados em gráficos interativos</p>
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary">
+                        Acessar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-success shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-dollar-sign fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Cotações</h5>
+                    <p class="card-text">Acompanhe cotações de moedas atualizadas diariamente</p>
+                    <a asp-controller="Cotacoes" asp-action="Index" class="btn btn-success">
+                        Acessar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-info shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Indicadores</h5>
+                    <p class="card-text">Consulte SELIC, IPCA e outros indicadores econômicos</p>
+                    <a asp-controller="Indicadores" asp-action="Index" class="btn btn-info text-white">
+                        Acessar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-warning shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-bell fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Alertas</h5>
+                    <p class="card-text">Configure alertas e receba notificações por e-mail</p>
+                    <a asp-controller="Alertas" asp-action="Index" class="btn btn-warning">
+                        Acessar <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-info-circle"></i> Sobre o Sistema</h5>
+                    <p class="card-text">
+                        Sistema desenvolvido com <strong>.NET 8</strong>, aplicando princípios de
+                        <strong>Clean Architecture</strong>, <strong>DDD (Domain-Driven Design)</strong> e
+                        <strong>SOLID</strong>.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Consumo de APIs públicas do Banco Central</li>
+                                <li><i class="fas fa-check text-success"></i> Background Jobs com Hangfire</li>
+                                <li><i class="fas fa-check text-success"></i> Notificações por e-mail</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Gráficos interativos com Chart.js</li>
+                                <li><i class="fas fa-check text-success"></i> Repository Pattern e Entity Framework Core</li>
+                                <li><i class="fas fa-check text-success"></i> SQL Server Database</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

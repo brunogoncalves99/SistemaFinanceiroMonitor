@@ -1,0 +1,133 @@
+﻿@model CotacaoViewModel
+@{
+    ViewData["Title"] = "Cotações";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-dollar-sign text-success"></i> Cotações de Moedas
+</h2>
+
+<!-- Seletor de Moeda -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="btn-group" role="group">
+            <a asp-action="Index" asp-route-tipoMoeda="@((int)TipoMoeda.Dolar)"
+               class="btn @(Model.TipoMoedaSelecionada == TipoMoeda.Dolar ? "btn-success" : "btn-outline-success")">
+                <i class="fas fa-dollar-sign"></i> Dólar (USD)
+            </a>
+            <a asp-action="Index" asp-route-tipoMoeda="@((int)TipoMoeda.Euro)"
+               class="btn @(Model.TipoMoedaSelecionada == TipoMoeda.Euro ? "btn-success" : "btn-outline-success")">
+                <i class="fas fa-euro-sign"></i> Euro (EUR)
+            </a>
+            <a asp-action="Index" asp-route-tipoMoeda="@((int)TipoMoeda.Libra)"
+               class="btn @(Model.TipoMoedaSelecionada == TipoMoeda.Libra ? "btn-success" : "btn-outline-success")">
+                <i class="fas fa-pound-sign"></i> Libra (GBP)
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Última Cotação -->
+@if (Model.UltimaCotacao != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle"></i> Última Cotação - @Model.UltimaCotacao.NomeMoeda
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Compra</h6>
+                            <h3>R$ @Model.UltimaCotacao.ValorCompra.ToString("N4")</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Venda</h6>
+                            <h3>R$ @Model.UltimaCotacao.ValorVenda.ToString("N4")</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Valor Médio</h6>
+                            <h3>R$ @Model.UltimaCotacao.ValorMedio.ToString("N4")</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted">Data</h6>
+                            <h3>@Model.UltimaCotacao.DataCotacao.ToString("dd/MM/yyyy")</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> Nenhuma cotação disponível no momento. Execute o job de atualização.
+    </div>
+}
+
+<!-- Histórico -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Histórico - Últimos 30 Dias</h5>
+                <a asp-action="Historico" asp-route-tipoMoeda="@((int)Model.TipoMoedaSelecionada)" class="btn btn-sm btn-light">
+                    <i class="fas fa-calendar-alt"></i> Ver Histórico Completo
+                </a>
+            </div>
+            <div class="card-body">
+                @if (Model.Cotacoes.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Compra</th>
+                                    <th>Venda</th>
+                                    <th>Médio</th>
+                                    <th>Variação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cotacao in Model.Cotacoes)
+                                {
+                                    <tr>
+                                        <td>@cotacao.DataCotacao.ToString("dd/MM/yyyy")</td>
+                                        <td>R$ @cotacao.ValorCompra.ToString("N4")</td>
+                                        <td>R$ @cotacao.ValorVenda.ToString("N4")</td>
+                                        <td>R$ @cotacao.ValorMedio.ToString("N4")</td>
+                                        <td>
+                                            @if (cotacao.VariacaoPercentual.HasValue)
+                                            {
+                                                var classe = cotacao.VariacaoPercentual >= 0 ? "text-success" : "text-danger";
+                                                var icone = cotacao.VariacaoPercentual >= 0 ? "fa-arrow-up" : "fa-arrow-down";
+                                                <span class="@classe">
+                                                    <i class="fas @icone"></i> @cotacao.VariacaoFormatada
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Nenhuma cotação disponível para esta moeda.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,246 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-tachometer-alt text-primary"></i> Dashboard
+    <small class="text-muted">Atualizado em @Model.DataAtualizacao.ToString("dd/MM/yyyy HH:mm")</small>
+</h2>
+
+<!-- Cards de Resumo -->
+<div class="row mb-4 g-4">
+    <!-- Dólar -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Dólar (USD)</h6>
+                        @if (Model.UltimaCotacaoDolar != null)
+                        {
+                            <h3 class="mb-0">R$ @Model.UltimaCotacaoDolar.ValorVenda.ToString("N4")</h3>
+                            @if (Model.UltimaCotacaoDolar.VariacaoPercentual.HasValue)
+                            {
+                                <small>@Model.UltimaCotacaoDolar.VariacaoFormatada</small>
+                            }
+                        }
+                        else
+                        {
+                            <h3 class="mb-0">-</h3>
+                            <small>Sem dados</small>
+                        }
+                    </div>
+                    <i class="fas fa-dollar-sign fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Euro -->
+    <div class="col-md-3">
+        <div class="card bg-info text-white shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">Euro (EUR)</h6>
+                        @if (Model.UltimaCotacaoEuro != null)
+                        {
+                            <h3 class="mb-0">R$ @Model.UltimaCotacaoEuro.ValorVenda.ToString("N4")</h3>
+                            @if (Model.UltimaCotacaoEuro.VariacaoPercentual.HasValue)
+                            {
+                                <small>@Model.UltimaCotacaoEuro.VariacaoFormatada</small>
+                            }
+                        }
+                        else
+                        {
+                            <h3 class="mb-0">-</h3>
+                            <small>Sem dados</small>
+                        }
+                    </div>
+                    <i class="fas fa-euro-sign fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELIC -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">SELIC</h6>
+                        @if (Model.UltimaSelic != null)
+                        {
+                            <h3 class="mb-0">@Model.UltimaSelic.Valor.ToString("N2")%</h3>
+                            <small>a.a.</small>
+                        }
+                        else
+                        {
+                            <h3 class="mb-0">-</h3>
+                            <small>Sem dados</small>
+                        }
+                    </div>
+                    <i class="fas fa-percentage fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IPCA -->
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title mb-0">IPCA</h6>
+                        @if (Model.UltimoIPCA != null)
+                        {
+                            <h3 class="mb-0">@Model.UltimoIPCA.Valor.ToString("N2")%</h3>
+                            <small>Inflação</small>
+                        }
+                        else
+                        {
+                            <h3 class="mb-0">-</h3>
+                            <small>Sem dados</small>
+                        }
+                    </div>
+                    <i class="fas fa-chart-line fa-3x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos -->
+<div class="row mb-4 g-4">
+    <!-- Gráfico Dólar -->
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-dollar-sign"></i> Cotação do Dólar - Últimos 30 Dias</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="graficoDolar" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico SELIC -->
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-percentage"></i> Taxa SELIC - Últimos 12 Meses</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="graficoSelic" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alertas -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-bell"></i> Resumo de Alertas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <h3 class="text-primary">@Model.TotalAlertasAtivos</h3>
+                        <p class="mb-0">Alertas Ativos</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="text-danger">@Model.TotalAlertasDisparados</h3>
+                        <p class="mb-0">Alertas Disparados</p>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a asp-controller="Alertas" asp-action="Index" class="btn btn-warning">
+                        <i class="fas fa-cog"></i> Gerenciar Alertas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Dados do servidor (já em formato JSON)
+        var graficoDolarLabels = @Html.Raw(Model.GraficoDolarLabels ?? "[]");
+        var graficoDolarValores = @Html.Raw(Model.GraficoDolarValores ?? "[]");
+        var graficoSelicLabels = @Html.Raw(Model.GraficoSelicLabels ?? "[]");
+        var graficoSelicValores = @Html.Raw(Model.GraficoSelicValores ?? "[]");
+
+        $(document).ready(function() {
+            // Gráfico do Dólar
+            if (graficoDolarLabels.length > 0) {
+                const ctxDolar = document.getElementById('graficoDolar').getContext('2d');
+                new Chart(ctxDolar, {
+                    type: 'line',
+                    data: {
+                        labels: graficoDolarLabels,
+                        datasets: [{
+                            label: 'Cotação (R$)',
+                            data: graficoDolarValores,
+                            borderColor: 'rgb(40, 167, 69)',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico da SELIC
+            if (graficoSelicLabels.length > 0) {
+                const ctxSelic = document.getElementById('graficoSelic').getContext('2d');
+                new Chart(ctxSelic, {
+                    type: 'bar',
+                    data: {
+                        labels: graficoSelicLabels,
+                        datasets: [{
+                            label: 'Taxa SELIC (%)',
+                            data: graficoSelicValores,
+                            backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                            borderColor: 'rgb(0, 123, 255)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

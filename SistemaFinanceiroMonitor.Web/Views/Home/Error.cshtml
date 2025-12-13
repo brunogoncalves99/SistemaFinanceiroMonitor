@@ -1,0 +1,37 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Erro";
+}
+
+<div class="container">
+    <h1 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Erro</h1>
+    <h2 class="text-danger">Ocorreu um erro ao processar sua solicitação.</h2>
+
+    @if (Model.ShowRequestId)
+    {
+        <p>
+            <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+
+    <div class="card mt-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">Possíveis Soluções</h5>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Verifique se o banco de dados está configurado corretamente</li>
+                <li>Certifique-se de que as migrations foram aplicadas</li>
+                <li>Verifique a connection string no appsettings.json</li>
+                <li>Consulte os logs do Hangfire em /hangfire</li>
+                <li>Verifique se o SQL Server está rodando</li>
+            </ul>
+
+            <div class="mt-3">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Voltar para Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,122 @@
+﻿@model AlertaViewModel
+@{
+    ViewData["Title"] = "Meus Alertas";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-bell text-warning"></i> Meus Alertas
+</h2>
+
+<!-- Botão Criar Novo -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <a asp-action="Criar" class="btn btn-success">
+            <i class="fas fa-plus"></i> Criar Novo Alerta
+        </a>
+    </div>
+</div>
+
+<!-- Lista de Alertas -->
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.Alertas.Any())
+        {
+            @foreach (var alerta in Model.Alertas)
+            {
+                var cardClass = alerta.Status switch
+                {
+                    StatusAlerta.Ativo => "border-success",
+                    StatusAlerta.Pausado => "border-secondary",
+                    StatusAlerta.Disparado => "border-danger",
+                    StatusAlerta.Inativo => "border-dark",
+                    _ => ""
+                };
+
+                var badgeClass = alerta.Status switch
+                {
+                    StatusAlerta.Ativo => "bg-success",
+                    StatusAlerta.Pausado => "bg-secondary",
+                    StatusAlerta.Disparado => "bg-danger",
+                    StatusAlerta.Inativo => "bg-dark",
+                    _ => "bg-secondary"
+                };
+
+                <div class="card mb-3 @cardClass shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="card-title">
+                                    @alerta.Descricao
+                                    <span class="badge @badgeClass">@alerta.StatusDescricao</span>
+                                </h5>
+                                <p class="card-text mb-1">
+                                    <strong>Tipo:</strong> @alerta.TipoAlertaDescricao
+                                </p>
+                                @if (alerta.TipoMoeda.HasValue)
+                                {
+                                    <p class="card-text mb-1">
+                                        <strong>Moeda:</strong> @alerta.NomeMoeda
+                                    </p>
+                                }
+                                @if (alerta.TipoIndicador.HasValue)
+                                {
+                                    <p class="card-text mb-1">
+                                        <strong>Indicador:</strong> @alerta.NomeIndicador
+                                    </p>
+                                }
+                                @if (alerta.ValorGatilho.HasValue)
+                                {
+                                    <p class="card-text mb-1">
+                                        <strong>Valor Gatilho:</strong> R$ @alerta.ValorGatilho.Value.ToString("N2")
+                                    </p>
+                                }
+                                <p class="card-text mb-1">
+                                    <strong>Criado em:</strong> @alerta.DataCriacao.ToString("dd/MM/yyyy HH:mm")
+                                </p>
+                                @if (alerta.DataUltimoDisparo.HasValue)
+                                {
+                                    <p class="card-text mb-0">
+                                        <strong>Último Disparo:</strong> @alerta.DataUltimoDisparo.Value.ToString("dd/MM/yyyy HH:mm")
+                                    </p>
+                                }
+                            </div>
+                            <div class="btn-group-vertical ms-3">
+                                @if (alerta.Status == StatusAlerta.Ativo)
+                                {
+                                    <form asp-action="Pausar" asp-route-id="@alerta.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-warning mb-1" onclick="return confirm('Deseja pausar este alerta?')">
+                                            <i class="fas fa-pause"></i> Pausar
+                                        </button>
+                                    </form>
+                                }
+                                @if (alerta.Status == StatusAlerta.Pausado || alerta.Status == StatusAlerta.Disparado)
+                                {
+                                    <form asp-action="Reativar" asp-route-id="@alerta.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-success mb-1">
+                                            <i class="fas fa-play"></i> Reativar
+                                        </button>
+                                    </form>
+                                }
+                                <a asp-action="Historico" asp-route-id="@alerta.Id" class="btn btn-sm btn-info text-white mb-1">
+                                    <i class="fas fa-history"></i> Histórico
+                                </a>
+                                <form asp-action="Remover" asp-route-id="@alerta.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Deseja remover este alerta?')">
+                                        <i class="fas fa-trash"></i> Remover
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Você ainda não possui alertas configurados.
+                <a asp-action="Criar" class="alert-link">Clique aqui para criar seu primeiro alerta.</a>
+            </div>
+        }
+    </div>
+</div>
