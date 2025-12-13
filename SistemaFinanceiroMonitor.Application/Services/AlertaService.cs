@@ -144,7 +144,7 @@ namespace SistemaFinanceiroMonitor.Application.Services
                 var mensagem = $@"
                     Olá {usuario.Nome},
                     
-                    Seu alerta foi ativado!
+                    Alerta no Sistema de Monitaramento de Moeda!
                     
                     Descrição: {alerta.Descricao}
                     Valor atual: R$ {valorAtual:F4}
