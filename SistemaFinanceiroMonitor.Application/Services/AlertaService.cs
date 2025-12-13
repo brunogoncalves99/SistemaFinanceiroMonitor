@@ -147,7 +147,7 @@ namespace SistemaFinanceiroMonitor.Application.Services
                     Alerta no Sistema de Monitaramento de Moeda!
                     
                     Descrição: {alerta.Descricao}
-                    Valor atual: R$ {valorAtual:F4}
+                    Valor atual: R$ {valorAtual:F2}
                     Data/Hora: {DateTime.Now:dd/MM/yyyy HH:mm}
                     
                     Acesse o dashboard para mais detalhes.
