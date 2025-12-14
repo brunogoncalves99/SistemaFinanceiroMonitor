@@ -180,7 +180,8 @@ O projeto segue os princípios da **Clean Architecture** com separação clara e
 
 ![Dashboard]
 > Visão geral com gráficos de cotações e indicadores
-> <img width="1913" height="912" alt="2" src="https://github.com/user-attachments/assets/9a41f748-8e85-4088-8418-70fbe86009cf" />
+<img width="1913" height="912" alt="2" src="https://github.com/user-attachments/assets/10bbb18f-b4ff-463b-ab21-efc7541f90f0" />
+
 
 </details>
 
@@ -189,7 +190,8 @@ O projeto segue os princípios da **Clean Architecture** com separação clara e
 
 ![Cotações]
 > Acompanhamento de cotações em tempo real
-<img width="1886" height="905" alt="3" src="https://github.com/user-attachments/assets/9999a990-3b01-44c1-919a-ea441f45b056" />
+> <img width="1886" height="905" alt="3" src="https://github.com/user-attachments/assets/48ce234e-9f5c-43c2-9474-d33876d9b5af" />
+
 </details>
 
 <details>
@@ -197,16 +199,17 @@ O projeto segue os princípios da **Clean Architecture** com separação clara e
 
 ![Indicadores]
 > Histórico de SELIC, IPCA e outros indicadores
-<img width="1911" height="905" alt="4" src="https://github.com/user-attachments/assets/df3054bb-dae2-4d41-bbfe-2a150ce46c7c" />
+<img width="1911" height="905" alt="4" src="https://github.com/user-attachments/assets/5653df6b-ca10-46f7-b3f9-0e01098d938e" />
 
 </details>
 
 <details>
 <summary>🔔 Sistema de Alertas</summary>
+<img width="863" height="448" alt="7" src="https://github.com/user-attachments/assets/c4ce6afb-1679-45ba-a11f-bd0a684f4edf" />
 
 ![Alertas]
 > Gestão completa de alertas configurados
-<img width="1909" height="907" alt="5" src="https://github.com/user-attachments/assets/0d20079e-51f1-4fa1-afb7-971dd7c0874d" />
+<img width="1909" height="907" alt="5" src="https://github.com/user-attachments/assets/a9fd0825-2b4f-411c-b377-03bff78061d0" />
 
 </details>
 
@@ -215,8 +218,8 @@ O projeto segue os princípios da **Clean Architecture** com separação clara e
 
 ![Admin]
 > Ferramentas administrativas e jobs
+<img width="1875" height="834" alt="6" src="https://github.com/user-attachments/assets/1e4c6eac-6e45-4f87-b71d-4a439031f021" />
 
-<img width="1875" height="834" alt="6" src="https://github.com/user-attachments/assets/fcd0902f-aeb1-4a03-ae9a-4a6ebd406b6e" />
 
 </details>
 
